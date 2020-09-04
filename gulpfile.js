@@ -148,9 +148,7 @@ function svg() {
 //
 function fonts() {
     src(path.fonts.src)
-    .pipe(ttf2woff())
-    return src(path.fonts.src)
-    .pipe(ttf2woff2())
+    .pipe(ttf2woff() && ttf2woff2())
     .pipe(dest(path.fonts.dest));
 }
 //
