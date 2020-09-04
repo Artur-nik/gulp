@@ -25,18 +25,18 @@ let way = "app";
 // jpg,png,svg,gif,ico,webp
 let path = {
     build: {
-        html:       way + "/",
+        html:       way + "/dest/",
         css:        way + "/dest/css/",
         js:         way + "/dest/js/",
         libraries:  way + "/dest/libraries/",
-        icon:       way + "/dest/icon/"
+        svgsprite:       way + "/dest/svg-sprite/"
     },
     src: {
-        html:       [way + "/src/html/*.html", '!' + way + "/src/html/_*.html"],
+        html:       [way + "/src/*.html", '!' + way + "/src/template/_*.html"],
         scss:       way + "/src/scss/**/*scss",
         libraries:  way + "/src/libraries/*.js", 
         js:         way + "/src/js/*.js",
-        icon:       way + "/src/icon/*.svg",
+        svgsprite:  way + "/src/svg-sprite/*.svg",
     },
     fonts: {
         build:      way + "/dest/fonts/", 
@@ -50,13 +50,13 @@ let path = {
         build:      way + "/dest/images/"
     },
     watch: {
-        html:       way + "/src/html/*html",
+        html:       way + "/src/**/*html",
         scss:       way + "/src/scss/**/*.scss",
         js:         way + "/src/js/**/*.js",
-        icon:       way + "/src/icon/*.svg",
+        svgsprite:  way + "/src/svg-sprite/*.svg",
         img:        way + "/src/images/*"
     },
-    clean: [way + "/dest/*", way + "/*html" ]
+    clean: [way + "/dest/*"]
 }
 
 
@@ -64,7 +64,8 @@ let path = {
 function browser_sync() {
     browserSync.init({ 
         server: {
-            baseDir: way
+            baseDir: way,
+            index: 'dest/index.html'
         },
         notify: false, // Отключаем уведомления
         online: true // Режим работы
@@ -108,12 +109,12 @@ function startwatch() {
     watch(path.watch.scss, styles);
     watch(path.watch.js, scripts);
     watch(path.watch.html, html);
-    watch(path.watch.icon, svg);
+    watch(path.watch.svgsprite, svg);
     watch(path.watch.img, images);
 }
 //
 function svg() {
-    return src(path.src.icon)    
+    return src(path.src.svgsprite)    
     .pipe(svgmin({
         js2svg: {
             pretty: true
@@ -140,7 +141,7 @@ function svg() {
             xmlDeclaration: false,
         }
     }))
-    .pipe(dest(path.build.icon))
+    .pipe(dest(path.build.svgsprite))
     .pipe(browserSync.stream());
 }
 
